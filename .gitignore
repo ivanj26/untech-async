@@ -1,1 +1,13 @@
+.idea/
+.vscode/
+.misc/
 vendor
+coverage.html
+coverage.out
+coverage.profile
+.env
+.env.*
+__debug_bin*
+cover 
+cover.out
+.DS_Store
