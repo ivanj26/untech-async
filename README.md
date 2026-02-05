@@ -5,8 +5,10 @@
   <a href="LICENSE"><img src="https://img.shields.io/github/license/ivanj26/untech-async" alt="License"></a>
 </p>
 
-# untech-async
-// TODO
+# untech<sup>2</sup>-async
+untech<sup>2</sup>-async is a promise-like library built for Go, technically inspired by the fully-featured JavaScript promise library, `bluebird.js`.
+
+It is designed for JavaScript/TypeScript developers who are new to Go. Philosophically, the name is taken from the President of Indonesia's jargon, ```"Hey, Antek-antek asing!"```, which sounds similar to ```"Hey, untech-untech async!"``` to non-native Indonesian speakers.
 
 ## Install
 
