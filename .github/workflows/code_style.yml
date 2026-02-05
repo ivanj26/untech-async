@@ -34,3 +34,8 @@ jobs:
         with:
           version: v2.7.1
           args: --timeout=5m
+
+  unit-tests:
+    name: Unit Test Check
+    needs: lint
+    uses: ./.github/workflows/test.yml

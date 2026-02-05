@@ -1,9 +1,7 @@
 name: Unit Test
 
 on:
-  workflow_run:
-    workflows: ["Code Style"]
-    types: [completed]
+  workflow_call:
 
 permissions:
   contents: read
