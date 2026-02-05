@@ -2,7 +2,7 @@ package untech_async
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"sync"
 
 	"golang.org/x/sync/semaphore"
@@ -75,8 +75,8 @@ func Map[T, U any](ctx context.Context, items []T, mapFn func(T) (U, error), opt
 			wg      sync.WaitGroup
 			sem     = semaphore.NewWeighted(opts.Concurrency)
 			mtx     sync.Mutex
-			values  []U = make([]U, len(items))
-			errChan     = make(chan error, 1)
+			values  = make([]U, len(items))
+			errChan = make(chan error, 1)
 		)
 
 		for i, item := range items {
@@ -133,17 +133,12 @@ func All[T any](ctx context.Context, promises ...*Promise[T]) *Promise[[]T] {
 	}
 
 	return NewPromise(ctx, func(resolveFn ResolveCallback[[]T], rejectFn RejectCallback) {
-		type result struct {
-			index int
-			val   T
-		}
-
 		var (
 			wg      sync.WaitGroup
 			errChan = make(chan error, 1)
 
 			mtx    sync.Mutex
-			values []T = make([]T, len(promises))
+			values = make([]T, len(promises))
 		)
 
 		for i, promise := range promises {
@@ -317,8 +312,8 @@ func Some[T any](ctx context.Context, promises []*Promise[T], count int) *Promis
 		}
 
 		var (
-			result  []T = make([]T, 0, count)
-			nbOfErr     = 0
+			result  = make([]T, 0, count)
+			nbOfErr = 0
 		)
 
 		for {
@@ -332,13 +327,13 @@ func Some[T any](ctx context.Context, promises []*Promise[T], count int) *Promis
 					resolveFn(result)
 					return
 				}
-			case _ = <-errChan:
+			case <-errChan:
 				nbOfErr++
 
 				// If too many rejected promises, it will be immediately
 				// and set promise state as rejected
 				if nbOfErr > len(promises)-count {
-					rejectFn(fmt.Errorf("Too many rejected promises!"))
+					rejectFn(errors.New("too many rejected promises"))
 					return
 				}
 			}

@@ -108,7 +108,9 @@ func TestAll(t *testing.T) {
 	})
 
 	t.Run("Should reject if context is timeout", func(t *testing.T) {
-		ctx, _ := context.WithTimeout(context.Background(), time.Duration(10)*time.Millisecond)
+		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10)*time.Millisecond)
+		defer cancel()
+
 		p1 := untech_async.NewPromise(context.Background(), func(resolve untech_async.ResolveCallback[int], reject untech_async.RejectCallback) {
 			time.Sleep(100 * time.Millisecond)
 			resolve(1)
@@ -259,7 +261,7 @@ func TestSome(t *testing.T) {
 		_, err := p.Await()
 
 		assert.Error(t, err)
-		assert.EqualError(t, err, "Too many rejected promises!")
+		assert.EqualError(t, err, "too many rejected promises")
 	})
 
 	t.Run("Should resolve even if there is a rejected promise, as long as number of rejected promises is less than provided count", func(t *testing.T) {

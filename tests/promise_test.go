@@ -63,7 +63,7 @@ func TestPromise_Catch(t *testing.T) {
 func TestChaining(t *testing.T) {
 	ctx := context.Background()
 
-	var data int = 0
+	var data = 0
 	var w sync.WaitGroup
 	w.Add(3)
 
@@ -109,8 +109,9 @@ func TestIsFulfilled(t *testing.T) {
 		time.Sleep(time.Duration(1) * time.Second)
 		resolveFn(true)
 	})
-	p.Await()
+	_, err := p.Await()
 
+	assert.NoError(t, err)
 	assert.True(t, p.IsFulFilled())
 }
 
@@ -120,8 +121,10 @@ func TestIsCancelled(t *testing.T) {
 		resolveFn(true)
 	})
 	p.Cancel()
-	p.Await() // wait until ch receive cancel signal
 
+	_, err := p.Await() // wait until ch receive cancel signal
+
+	assert.Error(t, err)
 	assert.True(t, p.IsCancelled())
 }
 
@@ -129,7 +132,8 @@ func TestIsRejected(t *testing.T) {
 	p := untech_async.NewPromise(context.Background(), func(resolveFn untech_async.ResolveCallback[any], rejectFn untech_async.RejectCallback) {
 		rejectFn(errors.New("error"))
 	})
-	p.Await()
+	_, err := p.Await()
 
+	assert.Error(t, err)
 	assert.True(t, p.IsRejected())
 }
