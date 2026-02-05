@@ -20,14 +20,14 @@ func TestPromise_Then(t *testing.T) {
 	p1 := untech_async.NewPromise(ctx, func(resolveFn untech_async.ResolveCallback[string], rejectFn untech_async.RejectCallback) {
 		resolveFn("Hello, ")
 	})
-	p2 := p1.Then(func(a any) (string, error) {
+	p2 := p1.Then(func(value string) (string, error) {
 		var sb strings.Builder
-		sb.WriteString(a.(string))
+		sb.WriteString(value)
 		sb.WriteString("world!")
 
 		return sb.String(), nil
 	})
-	p3 := p2.Then(func(_ any) (string, error) {
+	p3 := p2.Then(func(value string) (string, error) {
 		return "", expectedErr
 	})
 
@@ -71,16 +71,14 @@ func TestChaining(t *testing.T) {
 		NewPromise(ctx, func(resolve untech_async.ResolveCallback[int], reject untech_async.RejectCallback) {
 			resolve(2)
 		}).
-		Then(func(value any) (int, error) {
-			tmp := value.(int)
+		Then(func(value int) (int, error) {
 			w.Done()
-			return tmp + 1, nil
+			return value + 1, nil
 		}).
-		Then(func(value any) (int, error) {
-			tmp := value.(int)
+		Then(func(value int) (int, error) {
 			w.Done()
 
-			if tmp == 3 {
+			if value == 3 {
 				return 0, fmt.Errorf("it worked")
 			}
 			return 0, nil

@@ -17,7 +17,7 @@ const (
 )
 
 // ThenCallback is a callback function used to process the result of a Promise.
-type ThenCallback[T any] func(any) (T, error)
+type ThenCallback[T any] func(T) (T, error)
 
 // CatchCallback is a callback function to catch when there is an error during processing async task in the Promise.
 type CatchCallback[T any] func(context.Context, error) (T, error)

@@ -1,0 +1,47 @@
+name: Unit Test
+
+on:
+  workflow_run:
+    workflows: ["Code Style"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Go ${{ matrix.go }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        go: ['1.24.0']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Run tests with coverage
+        run: |
+          go test -coverpkg=./... ./tests -v -coverprofile=coverage.out
+
+      - name: Check coverage threshold
+        run: |
+          total=$(go tool cover -func=coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
+          echo "Total coverage: $total%"
+
+          required=75.0
+          if (( $(echo "$total < $required" | bc -l) )); then
+            echo "❌ Coverage $total% is below required $required%"
+            exit 1
+          fi
+
+          echo "✅ Coverage $total% meets requirement"
