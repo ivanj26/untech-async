@@ -8,7 +8,7 @@
 # untech<sup>2</sup>-async
 untech<sup>2</sup>-async is a promise-like library built for Go, technically inspired by the fully-featured JavaScript promise library `bluebird.js`. It is designed for JavaScript/TypeScript developers who are new to Go. The name is taken from the President of Indonesia's jargon, ```"Hey, Antek-antek asing!"```, which sounds similar to ```"Hey, untech-untech async!"``` to non-native Indonesian speakers.
 
-Unlike political promises, for example, the Indonesia Vice President's pledge during his political campaign to create 19 million jobs commitments, where it can be hard to track. A promise in `untech-async` is far more reliable. It is guaranteed to be settled, resolving to one of three states: fulfilled, rejected, or cancelled. No ambiguity, just results.
+Unlike politician' promise, for example, the Indonesia Vice President's pledge during his political campaign to create 19 million jobs commitments, where it can be hard to track. A promise in `untech-async` is far more reliable. It is guaranteed to be settled, resolving to one of three states: fulfilled, rejected, or cancelled. No ambiguity, just results.
 
 ## Install
 
@@ -235,4 +235,15 @@ The library also includes other powerful utilities for processing collections:
 -   **`ReduceParallel(promises, reduceFn, initial)`**: Reduces promise results as they complete.
 
 Check the `util_test.go` file for detailed examples of their usage.
+
+## Contributing
+
+Contributions are welcome.
+See [`PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md).
+
+---
+
+## 📄 License
+
+MIT License
 
